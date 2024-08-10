@@ -1,17 +1,17 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Default from "./layouts/default";
+import DefaultLayout from "./layouts/default";
 import { routes } from "./routes";
 
 function App() {
   return (
-    <Default>
+    <DefaultLayout>
       <Routes>
         {routes.map((route) => (
-          <Route path={route.path} element={route.element} />
+          <Route path={route.path} element={route.element} key={route.path} />
         ))}
       </Routes>
-    </Default>
+    </DefaultLayout>
   );
 }
 
