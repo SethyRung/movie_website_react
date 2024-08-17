@@ -12,10 +12,13 @@
   "dependencies": {
     "@iconify-icons/mdi": "^1.2.48",
     "@iconify/react": "^5.0.2",
+    "@react-hooks-library/core": "^0.6.2",
+    "clsx": "^2.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.0",
-    "tailwind-merge": "^2.4.0"
+    "tailwind-merge": "^2.4.0",
+    "usehooks-ts": "^3.1.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

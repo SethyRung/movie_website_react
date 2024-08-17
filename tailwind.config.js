@@ -2,6 +2,11 @@
 export const content = ["./src/**/*.{js,jsx,ts,tsx}"];
 export const theme = {
   extend: {
+    fontFamily: {
+      redHatMono: ["'Red Hat Mono'"],
+      redHatText: ["'Red Hat Text'"],
+      roboto: ["'Roboto'"],
+    },
     colors: {
       primary: {
         50: "#f1e9f8",
@@ -53,8 +58,9 @@ export const theme = {
       },
     },
     screens: {
+      lgMobile: "480px",
       tablet: "844px",
-      desktop: "1920px",
+      desktop: "1280px",
     },
   },
 };
