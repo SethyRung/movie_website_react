@@ -36,14 +36,15 @@ export interface ICarouselProps {
   ui?: ICarouselUI;
   arrows?: boolean;
   prevButton?: {
-    label: string;
-    icon: string;
+    label?: string;
+    icon?: string;
   };
   nextButton?: {
-    label: string;
-    icon: string;
+    label?: string;
+    icon?: string;
   };
   indicators?: boolean;
+  onPageChange?: (page: number) => void;
   slot: {
     default: (item: string, index: number) => JSX.Element;
     prev?: (onClick: () => void, disabled: boolean) => JSX.Element;
@@ -53,7 +54,10 @@ export interface ICarouselProps {
 }
 
 const Carousel = forwardRef<ICarouselRef, ICarouselProps>(
-  ({ items, ui, arrows = false, prevButton, nextButton, indicators = false, slot }, ref) => {
+  (
+    { items, ui, arrows = false, prevButton, nextButton, indicators = false, onPageChange, slot },
+    ref
+  ) => {
     const defaultUI: ICarouselUI = {
       wrapper: "relative",
       container: "relative w-full h-full flex overflow-x-auto snap-x snap-mandatory scroll-smooth",
@@ -92,7 +96,7 @@ const Carousel = forwardRef<ICarouselRef, ICarouselProps>(
     const [x, setX] = useState(0);
     useScroll(carouselRef, ({ scrollX }) => setX(scrollX));
 
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     useEffect(() => {
       if (!itemWidth) {
         setCurrentPage(0);
@@ -113,7 +117,8 @@ const Carousel = forwardRef<ICarouselRef, ICarouselProps>(
     useEffect(() => {
       setIsFirst(currentPage <= 1);
       setIsLast(currentPage === pages);
-    }, [currentPage, pages]);
+      onPageChange && onPageChange(currentPage);
+    }, [currentPage, onPageChange, pages]);
 
     const onClickPrev = useCallback(() => {
       carouselRef.current && carouselRef.current.scrollBy({ behavior: "smooth", left: -itemWidth });
@@ -160,7 +165,9 @@ const Carousel = forwardRef<ICarouselRef, ICarouselProps>(
                 onClick={onClickPrev}
                 disabled={isFirst}
                 className={clsx(ui.arrows?.prevButton, isFirst && "cursor-not-allowed")}>
-                <Icon icon={prevButton ? prevButton.icon : "mdi-arrow-left-circle"} />
+                <Icon
+                  icon={prevButton && prevButton.icon ? prevButton.icon : "mdi-arrow-left-circle"}
+                />
                 {prevButton?.label}
               </button>
             )}
@@ -172,7 +179,9 @@ const Carousel = forwardRef<ICarouselRef, ICarouselProps>(
                 onClick={onClickNext}
                 disabled={isLast}
                 className={clsx(ui.arrows?.nextButton, isLast && "cursor-not-allowed")}>
-                <Icon icon={nextButton ? nextButton.icon : "mdi-arrow-right-circle"} />
+                <Icon
+                  icon={nextButton && nextButton.icon ? nextButton.icon : "mdi-arrow-right-circle"}
+                />
                 {nextButton?.label}
               </button>
             )}
