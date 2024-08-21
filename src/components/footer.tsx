@@ -77,12 +77,12 @@ export default function Footer() {
   return (
     <div className="w-full p-4 tablet:py-8 tablet:px-16 desktop:px-52 bg-tertiary-500 flex flex-col tablet:flex-row items-center justify-between gap-6">
       {footerItems.map((ft, i) => (
-        <div className="flex flex-col items-center tablet:items-start gap-2">
-          {i === 0 ? <img src="/src/assets/logo.svg" alt="logo" /> : null}
+        <div key={i} className="flex flex-col items-center tablet:items-start gap-2">
+          {i === 0 && <img src="/assets/logo.svg" alt="logo" />}
           <h2 className="text-white text-center">{ft.sectionTitle}</h2>
-          {ft.sectionItems.map((st) => (
-            <div className="w-fit text-grey-500 flex items-center justify-center gap-2">
-              {st.icon ? <Icon icon={st.icon} width="16" /> : null}
+          {ft.sectionItems.map((st, i) => (
+            <div key={i} className="w-fit text-grey-500 flex items-center justify-center gap-2">
+              {st.icon && <Icon icon={st.icon} width="16" />}
               <a href={st.link.to} className="text-xs">
                 {st.link.name}
               </a>

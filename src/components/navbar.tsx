@@ -31,9 +31,9 @@ export default function NavBar() {
   }, [route]);
 
   return (
-    <div className="bg-tertiary-500 sticky top-0">
+    <div className="bg-tertiary-500 sticky top-0 z-[1000]">
       <div className="h-14 px-4 tablet:px-16 desktop:px-52 flex justify-between items-center">
-        <img src="/src/assets/logo.svg" alt="logo" />
+        <img src="/assets/logo.svg" alt="logo" />
         <ul className="hidden tablet:flex justify-between items-center gap-8 text-white">
           {navItems.map((item) => (
             <li key={item.to}>
@@ -72,7 +72,7 @@ export default function NavBar() {
           )}
         </button>
       </div>
-      {isNavOpen ? (
+      {isNavOpen && (
         <ul className="py-2 tablet:hidden">
           {navItems.map((item) => (
             <li key={item.to}>
@@ -89,7 +89,7 @@ export default function NavBar() {
             </li>
           ))}
         </ul>
-      ) : null}
+      )}
     </div>
   );
 }
