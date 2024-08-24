@@ -16,7 +16,7 @@ export default function Footer() {
       sectionItems: [
         {
           icon: "mdi-map-marker",
-          link: { name: "Level 8, Bashdf City 13/3 Ka, Panldf, Cambodia", to: "" },
+          link: { name: "Russian Federation Blvd (110), Phnom Penh, Cambodia", to: "" },
         },
       ],
     },
@@ -50,8 +50,8 @@ export default function Footer() {
         {
           icon: "mdi-email",
           link: {
-            name: "example@gmail.com",
-            to: "mailto:example@gmail.com",
+            name: "rungsethyhk@gmail.com",
+            to: "mailto:rungsethyhk@gmail.com",
           },
         },
       ],

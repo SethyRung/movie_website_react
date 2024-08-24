@@ -27,13 +27,13 @@ const MovieCard = () => {
           to=""
           className="w-full h-8 text-white rounded bg-primary-500 hover:bg-primary-600 transition-all flex items-center justify-center gap-2 text-xs tablet:text-base">
           <Icon icon="mdi-bookmark-box-multiple" width="16" />
-          See details
+          Get Tickets
         </Link>
         <Link
           to=""
           className="w-full h-8 text-white border border-primary-500 rounded bg-primary-500/15 hover:border-2 transition-all flex items-center justify-center gap-2 text-xs tablet:text-base">
-          <Icon icon="mdi-bookmark-box-multiple" width="16" />
-          See details
+          <Icon icon="mdi-eye" width="16" />
+          View Details
         </Link>
       </div>
     </div>

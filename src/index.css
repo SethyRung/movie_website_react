@@ -5,26 +5,64 @@
 @tailwind utilities;
 
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  background-color: transparent;
+  height: 0.6em;
+  width: 0.6em;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
-  background: #a3a5ad;
-  border-radius: 4px;
+  opacity: 1;
+  background-color: #1f2937;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #6e727e;
-  border-radius: 4px;
+  opacity: 1;
+  border-radius: 0.6em;
+  background-color: #374151;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  opacity: 1;
+  background-color: #4b5563;
 }
+
+/* .scrollbars ::-webkit-scrollbar {
+  background-color: transparent;
+  height: 0.6em;
+  width: 0.6em;
+}
+
+.scrollbars ::-webkit-scrollbar-track {
+  opacity: 1;
+  background-color: #f3f4f6;
+}
+
+.scrollbars ::-webkit-scrollbar-thumb {
+  border-radius: 0.6em;
+  opacity: 1;
+  background-color: #d1d5db;
+}
+
+.scrollbars ::-webkit-scrollbar-thumb:hover {
+  opacity: 1;
+  background-color: #9ca3af;
+} */
+
+/* .scrollbars.dark ::-webkit-scrollbar-track {
+  opacity: 1;
+  background-color: #1f2937;
+}
+
+.scrollbars.dark ::-webkit-scrollbar-thumb {
+  opacity: 1;
+  border-radius: 0.6em;
+  background-color: #374151;
+}
+
+.scrollbars.dark ::-webkit-scrollbar-thumb:hover {
+  opacity: 1;
+  background-color: #4b5563;
+} */
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;

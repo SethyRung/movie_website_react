@@ -25,6 +25,7 @@ export interface IPaginationProps {
   divider?: string;
   pageCount?: number;
   disabled?: boolean;
+  showIndicators?: boolean;
   showFirst?: boolean;
   showLast?: boolean;
   showPrev?: boolean;
@@ -62,6 +63,7 @@ const Pagination = ({
   divider = "\u2026",
   pageCount = 10,
   disabled = false,
+  showIndicators = true,
   showFirst = false,
   showLast = false,
   showPrev = false,
@@ -265,20 +267,21 @@ const Pagination = ({
             </button>
           )}
 
-      {displayPages?.map((page, index) => (
-        <button
-          key={`${page}-${index}`}
-          disabled={disabled}
-          aria-label="Click"
-          className={twMerge(
-            ui.base,
-            ui.rounded,
-            page === currentPage ? ui.activeButton : ui.inactiveButton
-          )}
-          onClick={() => onClickPage(page)}>
-          {page}
-        </button>
-      ))}
+      {showIndicators &&
+        displayPages?.map((page, index) => (
+          <button
+            key={`${page}-${index}`}
+            disabled={disabled}
+            aria-label="Click"
+            className={twMerge(
+              ui.base,
+              ui.rounded,
+              page === currentPage ? ui.activeButton : ui.inactiveButton
+            )}
+            onClick={() => onClickPage(page)}>
+            {page}
+          </button>
+        ))}
 
       {slot && slot.next
         ? slot.next(onClickNext)
