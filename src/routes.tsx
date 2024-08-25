@@ -8,7 +8,7 @@ export const routes: { path: string; element: JSX.Element }[] = [
     element: <Index />,
   },
   {
-    path: "/movie",
+    path: "/movie/:id",
     element: <MovieIndex />,
   },
   {

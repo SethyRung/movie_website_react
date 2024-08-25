@@ -16,7 +16,10 @@ export default function Footer() {
       sectionItems: [
         {
           icon: "mdi-map-marker",
-          link: { name: "Russian Federation Blvd (110), Phnom Penh, Cambodia", to: "" },
+          link: {
+            name: "Russian Federation Blvd (110), Phnom Penh, Cambodia",
+            to: "https://maps.app.goo.gl/KBEPEZKUzDabsgT79",
+          },
         },
       ],
     },
@@ -26,13 +29,13 @@ export default function Footer() {
         {
           link: {
             name: "Movie",
-            to: "",
+            to: "/movie",
           },
         },
         {
           link: {
             name: "TV Series",
-            to: "",
+            to: "/tv-series",
           },
         },
       ],
@@ -62,13 +65,13 @@ export default function Footer() {
         {
           link: {
             name: "Student Reward Program",
-            to: "",
+            to: "#",
           },
         },
         {
           link: {
             name: "Privacy policy",
-            to: "",
+            to: "#",
           },
         },
       ],
