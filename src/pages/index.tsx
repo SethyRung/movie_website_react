@@ -58,12 +58,18 @@ export default function Index() {
         </div>
       </div>
       <div className="w-full bg-tertiary-500 p-4 flex overflow-x-scroll" ref={parentMovieCardRef}>
-        <MovieCard />
-        <MovieCard />
-        <MovieCard />
-        <MovieCard />
-        <MovieCard />
-        <MovieCard />
+        {Array.from({ length: 10 }, (_, index) => index + 1).map((_, index) => (
+          <div className="w-52 flex-shrink-0 bg-secondary-500" key={index}>
+            <MovieCard
+              id={12}
+              imgSrc="/assets/Avatar-Poster.webp"
+              title="John WicK: Chapter 4"
+              release="23/10/2023"
+              rating={4.5}
+              genre="Action"
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

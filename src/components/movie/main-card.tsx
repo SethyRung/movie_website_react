@@ -22,7 +22,7 @@ export default function MainCard() {
 
         carouselRef.current.next();
       }, 5000);
-  });
+  }, [carouselImgLoading]);
 
   const [currentValue, setCurrentValue] = useState(1);
   const prevCarouselPage = useRef(currentValue);
@@ -125,7 +125,7 @@ export default function MainCard() {
         <Link
           to=""
           className="w-32 h-8 bg-primary-500 hover:bg-primary-600 transition-all rounded-2xl flex items-center justify-center gap-2 text-xs tablet:text-base">
-          <Icon icon="mdi-bookmark-box-multiple" width="16" />
+          <Icon icon="mdi-eye" width="16" />
           See details
         </Link>
         <div className="hidden lgMobile:block ">
