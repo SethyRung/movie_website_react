@@ -3,25 +3,27 @@ import { Link } from "react-router-dom";
 
 const MovieCard = ({
   id,
-  imgSrc,
+  images,
   title,
   release,
-  genre,
+  language,
   rating,
 }: {
   id: number;
-  imgSrc: string;
+  images: string;
   title: string;
   release: string;
-  genre: string;
-  rating: number;
+  language: string;
+  rating: string;
 }) => {
   return (
     <div className="w-full h-full p-2">
-      <img src={imgSrc} alt={`${title} Image`} className="w-full h-40 mb-4 object-cover" />
+      <img src={images} alt={`${title} Image`} className="w-full h-[60%] mb-4 object-cover" />
       <div className="flex flex-col gap-2">
         <div className="flex justify-between gap-2">
-          <h1 className="text-white font-redHatMono text-sm font-bold">{title}</h1>
+          <h1 className="text-white font-redHatMono text-sm font-bold line-clamp-2 h-10">
+            {title}
+          </h1>
           <div className="w-fit h-fit px-2 py-1 font-roboto text-[#FFA100] bg-[#FFA100]/10 text-xs rounded-2xl flex justify-between items-center gap-1">
             <Icon icon="mdi-star" />
             <span>{rating}</span>
@@ -30,8 +32,8 @@ const MovieCard = ({
         <div className="grid grid-cols-[auto,_1fr] grid-rows-2 text-xs font-roboto gap-y-2 gap-x-3">
           <p className="text-grey-500">Release :</p>
           <p className="text-gray-400">{release}</p>
-          <p className="text-grey-500">Genre :</p>
-          <p className="text-gray-400">{genre}</p>
+          <p className="text-grey-500">Language :</p>
+          <p className="text-gray-400">{language}</p>
         </div>
         <Link
           to=""

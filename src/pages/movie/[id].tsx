@@ -1,23 +1,40 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import CastCard from "../../components/movie/cast-card";
-import { useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import getMovieDetail, { type ResponseBody as MovieDetail } from "../../api/movie-detail.get";
+import getVideos from "../../api/movie-videos.get";
+import getMovieCredits, { type ResponseBody as Credits } from "../../api/movie-credits.get";
+import getKeyword, { type ResponseBody as Keywords } from "../../api/movie-keywords.get";
 
 export default function Index() {
   const { id: movieId } = useParams();
-  console.log(movieId);
 
-  const cast = [
-    { name: "Shawn Levy", role: "Director, Writer" },
-    { name: "Shawn Levy", role: "Director, Writer" },
-    { name: "Shawn Levy", role: "Director, Writer" },
-    { name: "Shawn Levy", role: "Director, Writer" },
-    { name: "John Romita Sr.", role: "Director, Writer" },
-    { name: "Shawn Levy", role: "Director, Writer" },
-    { name: "Shawn Levy", role: "Director, Writer" },
-    { name: "Shawn Levy", role: "Director, Writer" },
-    { name: "Shawn Levy", role: "Director, Writer" },
-  ];
+  const [movie, setMovie] = useState<MovieDetail>();
+  const [movieTrailerURL, setMovieTrailerURL] = useState<string>("");
+  const [credits, setCredits] = useState<Credits>();
+  const [keywords, setKeywords] = useState<Keywords>();
+
+  useEffect(() => {
+    const loadData = async () => {
+      if (!movieId || isNaN(parseInt(movieId))) return;
+      const movie_id = parseInt(movieId);
+
+      const movie = await getMovieDetail(movie_id);
+      setMovie(movie);
+
+      const movieVideos = await getVideos(movie_id);
+      const video = movieVideos?.results.find((v) => v.site === "YouTube" && v.type === "Trailer");
+      video && setMovieTrailerURL(`https://www.youtube.com/watch?v=${video.key}`);
+
+      const credits = await getMovieCredits(movie_id);
+      setCredits(credits);
+
+      const keywords = await getKeyword(movie_id);
+      setKeywords(keywords);
+    };
+    loadData();
+  }, [movieId]);
 
   const castCardRef = useRef<HTMLDivElement>(null);
 
@@ -35,44 +52,45 @@ export default function Index() {
     <div className="w-full p-4 tablet:px-16 desktop:px-52">
       <div className="p-4 bg-tertiary-500 rounded-lg flex flex-col tablet:flex-row tablet:gap-4">
         <img
-          src="/assets/Avatar-Poster.webp"
-          alt=""
-          className="w-[320px] mx-auto object-cover rounded-lg"
+          src={`https://image.tmdb.org/t/p/original/${movie?.poster_path}`}
+          alt={`${movie?.original_title}_Poster`}
+          className="w-[320px] max-h-72 mx-auto object-cover rounded-lg"
         />
         <div>
           <div className="mt-4 mb-6">
             <h1 className="text-white text-2xl font-bold font-redHatText">
-              Deadpool & Wolverine (2024)
+              {movie?.original_title}
             </h1>
             <p className="text-grey-500 text-sm font-redHatText mt-2">
-              07/25/2024 (KH) Science Fiction, Action, Comedy 2h 8m
+              {`${movie?.release_date} (${movie?.original_language.toUpperCase()}) ${movie?.genres.map((m) => m.name).join(", ")} ${movie?.runtime && Math.floor(movie?.runtime / 60)}h ${movie?.runtime && Math.floor(movie?.runtime % 60)}mn`}
             </p>
           </div>
           <div className="flex items-center gap-7">
-            <div className="w-16 h-16 flex justify-center items-center border-[4px] border-primary-500 rounded-full text-white text-xl font-bold font-redHatMono">
-              83
-              <sup className="ml-1 text-sm">%</sup>
+            <div className="w-16 h-16 flex justify-center items-center border-[4px] border-primary-500 rounded-full text-white text-lg font-bold font-redHatMono">
+              <sup>{movie?.vote_average ? Math.ceil(movie?.vote_average) : 0}</sup>/<sub>10</sub>
             </div>
-            <button className="p-2 bg-primary-500/30 rounded text-white flex items-center gap-2">
+            <Link
+              to={movieTrailerURL}
+              target="_blank"
+              className="p-2 bg-primary-500/30 rounded text-white flex items-center gap-2">
               <Icon icon="mdi-play-circle" />
               <span className="font-redHatText text-base font-bold">Play Trailer</span>
-            </button>
+            </Link>
           </div>
           <div className="text-white my-6">
             <h2 className="font-redHatText font-bold text-base">Overview</h2>
-            <p className="mt-2 text-sm text-grey-500 text-justify">
-              A listless Wade Wilson toils away in civilian life with his days as the morally
-              flexible mercenary, Deadpool, behind him. But when his homeworld faces an existential
-              threat, Wade must reluctantly suit-up again with an even more reluctant Wolverine.
-            </p>
+            <p className="mt-2 text-sm text-grey-500 text-justify">{movie?.overview}</p>
           </div>
-          <div className="grid grid-cols-3 gap-4">
-            {cast.map((c, i) => (
-              <div className="w-full break-all" key={`${i}-${c.name}`}>
-                <h2 className="text-white font-redHatText font-bold text-sm mb-2">{c.name}</h2>
-                <h2 className="text-grey-500 text-xs">{c.role}</h2>
-              </div>
-            ))}
+          <div className="grid grid-cols-2 tablet:grid-cols-3 desktop:grid-cols-4 gap-4">
+            {credits?.crew.map(
+              (c, i) =>
+                i < 12 && (
+                  <div className="w-full break-all" key={`${i}-${c.name}`}>
+                    <h2 className="text-white font-redHatText font-bold text-sm mb-2">{c.name}</h2>
+                    <h2 className="text-grey-500 text-xs">{c.known_for_department}</h2>
+                  </div>
+                )
+            )}
           </div>
         </div>
       </div>
@@ -95,43 +113,59 @@ export default function Index() {
           </button>
         </div>
       </div>
-      <div className="flex flex-col gap-8 tablet:flex-row tablet:gap-6 my-8">
-        <div className="w-full pb-4 flex gap-4 overflow-x-scroll" ref={castCardRef}>
-          {Array.from({ length: 5 }, (_, index) => index + 1).map((_, index) => (
+      <div className="grid grid-cols-1 gap-8 tablet:grid-cols-2 tablet:gap-4 my-8">
+        <div
+          className="w-full h-fit pb-4 flex gap-4 overflow-x-scroll overflow-y-hidden"
+          ref={castCardRef}>
+          {credits?.cast.map((c, i) => (
             <CastCard
-              profile="/assets/Avatar-Poster.webp"
-              name="Ryan Reynolds"
-              acting="Wade Wilson / Deadpool"
-              key={index}
+              profile={`https://image.tmdb.org/t/p/original/${c.profile_path}`}
+              name={c.name}
+              character={c.character}
+              key={`${i}-${c.name}`}
             />
           ))}
         </div>
-        <div className="p-4 bg-tertiary-500 rounded grid grid-cols-2">
+        <div className="w-full h-full p-4 bg-tertiary-500 rounded grid grid-cols-1 gap-6 lgMobile:grid-cols-2 lgMobile:gap-0">
           <div className="grid gap-3">
             <div className="font-redHatText font-bold">
               <h1 className="text-white text-sm mb-1">Status</h1>
-              <p className="text-grey-500 text-xs">Released</p>
+              <p className="text-grey-500 text-xs">{movie?.status}</p>
             </div>
             <div className="font-redHatText font-bold">
               <h1 className="text-white text-sm mb-1">Original Language</h1>
-              <p className="text-grey-500 text-xs">English</p>
+              <p className="text-grey-500 text-xs">{movie?.original_language.toUpperCase()}</p>
             </div>
             <div className="font-redHatText font-bold">
               <h1 className="text-white text-sm mb-1">Revenue</h1>
-              <p className="text-grey-500 text-xs">$250,000,000.00</p>
+              <p className="text-grey-500 text-xs">
+                {movie?.budget &&
+                  Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
+                    movie?.revenue
+                  )}
+              </p>
             </div>
             <div className="font-redHatText font-bold">
               <h1 className="text-white text-sm mb-1">Budget</h1>
-              <p className="text-grey-500 text-xs">$250,000,000.00</p>
+              <p className="text-grey-500 text-xs">
+                {movie?.budget &&
+                  Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
+                    movie?.budget
+                  )}
+              </p>
             </div>
           </div>
           <div className="font-redHatText font-bold text-white text-sm">
             <h1>KeyWord</h1>
             <div className="mt-4 flex flex-wrap gap-2">
-              <div className="w-fit py-2 px-4 bg-secondary-500 rounded-md">Hero</div>
-              <div className="w-fit py-2 px-4 bg-secondary-500 rounded-md">Hero</div>
-              <div className="w-fit py-2 px-4 bg-secondary-500 rounded-md">Hero</div>
-              <div className="w-fit py-2 px-4 bg-secondary-500 rounded-md">Hero</div>
+              {keywords?.keywords.map(
+                (k, i) =>
+                  i < 6 && (
+                    <div className="w-fit py-2 px-4 bg-secondary-500 rounded-md" key={k.id}>
+                      {k.name}
+                    </div>
+                  )
+              )}
             </div>
           </div>
         </div>

@@ -7,7 +7,19 @@ import Pagination from "../pagination";
 import clsx from "clsx";
 import { useWindowSize } from "@react-hooks-library/core";
 
-export default function MainCard() {
+const MainCard = ({
+  id,
+  title,
+  overview,
+  genre,
+  images,
+}: {
+  id: number;
+  title: string;
+  overview: string;
+  genre: string;
+  images: string[];
+}) => {
   const carouselRef = useRef<ICarouselRef>(null);
 
   const [carouselImgLoading, setCarouselImgLoading] = useState(true);
@@ -55,14 +67,7 @@ export default function MainCard() {
       <div className="w-full lgMobile:w-[60%] aspect-video overflow-hidden">
         <Carousel
           ref={carouselRef}
-          items={[
-            "https://picsum.photos/600/800?random=1",
-            "https://picsum.photos/600/800?random=2",
-            "https://picsum.photos/600/800?random=3",
-            "https://picsum.photos/600/800?random=4",
-            "https://picsum.photos/600/800?random=5",
-            "https://picsum.photos/600/800?random=6",
-          ]}
+          items={images}
           ui={{
             item: "basis-full",
             wrapper: "h-full",
@@ -92,8 +97,8 @@ export default function MainCard() {
           <Pagination
             currentValue={currentValue}
             onCurrentValueChange={onCurrentValueChange}
-            total={carouselRef.current ? carouselRef.current.pages : 10}
-            max={16}
+            total={images.length}
+            max={images.length}
             pageCount={1}
             ui={{
               wrapper: "gap-x-3",
@@ -109,21 +114,17 @@ export default function MainCard() {
 
       <div className="py-4 grow lgMobile:w-[40%] flex flex-col justify-between">
         <div className="flex flex-col gap-2">
-          <p className=" text-primary-500 text-xs tablet:text-sm  font-redHatMono">
-            Action, Adventure
-          </p>
+          <p className=" text-primary-500 text-xs tablet:text-sm  font-redHatMono">{genre}</p>
           <h1 className="uppercase text-2xl tablet:text-[32px] font-bold font-redHatMono">
-            AVATAR
+            {title}
           </h1>
-          <h2 className="uppercase text-base tablet:text-2xl font-redHatText">THE WAY OF WATER</h2>
+          <h2 className="uppercase text-base tablet:text-2xl font-redHatText"></h2>
           <p className="font-roboto text-justify text-xs tablet:text-base text-grey-500 mb-6">
-            Jake Sully lives with her newfound family formed on the planet of Pandora. Once a
-            familiar threat returns to finish what was previously started, Jake must work with
-            Neytiri and the army of the Na’vi race to protect their plane.
+            {overview}
           </p>
         </div>
         <Link
-          to=""
+          to={`/movie/${id}`}
           className="w-32 h-8 bg-primary-500 hover:bg-primary-600 transition-all rounded-2xl flex items-center justify-center gap-2 text-xs tablet:text-base">
           <Icon icon="mdi-eye" width="16" />
           See details
@@ -133,8 +134,8 @@ export default function MainCard() {
             <Pagination
               currentValue={currentValue}
               onCurrentValueChange={onCurrentValueChange}
-              total={carouselRef.current.pages}
-              max={screenWidth > 500 ? 16 : 5}
+              total={images.length}
+              max={screenWidth > 500 ? images.length : 5}
               pageCount={1}
               showPrev
               showNext
@@ -154,4 +155,6 @@ export default function MainCard() {
       </div>
     </div>
   );
-}
+};
+
+export default MainCard;
