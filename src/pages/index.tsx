@@ -1,8 +1,12 @@
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import MainCard from "../components/movie/main-card";
 import MovieCard from "../components/movie/movie-card";
 import Tabs from "../components/tabs";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import getMainMovie, { type ResponseBody as Movie } from "../api/main-movie.get";
+import getNowPlaying, { type ResponseBody as MovieList } from "../api/now-playing.get";
+import getUpcoming from "../api/upcoming.get";
+import getPopular from "../api/popular.get";
 
 export default function Index() {
   const tabs = [
@@ -12,14 +16,14 @@ export default function Index() {
     },
     {
       title: "Coming Soon",
-      key: "comingSoon",
+      key: "upcoming",
     },
     {
-      title: "Show Time",
-      key: "showTime",
+      title: "Popular",
+      key: "popular",
     },
   ];
-  const [currentTab, setCurrentTab] = useState<string>();
+  const [currentTab, setCurrentTab] = useState<string>("nowPlaying");
 
   const parentMovieCardRef = useRef<HTMLDivElement>(null);
   const scrollTo = (scrollTo: "ToLeft" | "ToRight") => {
@@ -33,9 +37,45 @@ export default function Index() {
     }
   };
 
+  const [mainMovie, setMainMovie] = useState<Movie | undefined>(undefined);
+  const [movieList, setMovieList] = useState<MovieList>();
+
+  const loadMovieList = useCallback(async () => {
+    const movies =
+      currentTab === "nowPlaying"
+        ? await getNowPlaying()
+        : currentTab === "upcoming"
+          ? await getUpcoming()
+          : await getPopular();
+    setMovieList(movies);
+  }, [currentTab]);
+
+  const loadData = async () => {
+    const res = await getMainMovie();
+    setMainMovie(res);
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    loadMovieList();
+  }, [loadMovieList]);
+
   return (
     <div className="w-full p-4 tablet:px-16 desktop:px-52">
-      <MainCard />
+      {mainMovie && (
+        <MainCard
+          id={mainMovie.id}
+          genre={""}
+          title={mainMovie.original_title}
+          overview={mainMovie.overview}
+          images={mainMovie.images.posters
+            .map((img) => "https://image.tmdb.org/t/p/original" + img.file_path)
+            .slice(0, 6)}
+        />
+      )}
       <div className="flex justify-between items-center gap-8">
         <Tabs
           items={tabs}
@@ -57,16 +97,18 @@ export default function Index() {
           </button>
         </div>
       </div>
-      <div className="w-full bg-tertiary-500 p-4 flex overflow-x-scroll" ref={parentMovieCardRef}>
-        {Array.from({ length: 10 }, (_, index) => index + 1).map((_, index) => (
-          <div className="w-52 flex-shrink-0 bg-secondary-500" key={index}>
+      <div
+        className="w-full h-fit bg-tertiary-500 p-4 flex overflow-x-scroll"
+        ref={parentMovieCardRef}>
+        {movieList?.results.map((movie) => (
+          <div className="w-52 flex-shrink-0 bg-secondary-500" key={movie.id}>
             <MovieCard
-              id={12}
-              imgSrc="/assets/Avatar-Poster.webp"
-              title="John WicK: Chapter 4"
-              release="23/10/2023"
-              rating={4.5}
-              genre="Action"
+              id={movie.id}
+              images={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+              title={movie.original_title}
+              release={movie.release_date}
+              rating={movie?.vote_average.toFixed(2)}
+              language={movie.original_language.toLocaleUpperCase()}
             />
           </div>
         ))}
