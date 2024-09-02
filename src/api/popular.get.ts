@@ -27,14 +27,14 @@ type ResponseBody = {
   total_results: number;
 };
 
-const getTopRated = async (): Promise<ResponseBody | undefined> => {
+const getPopular = async (page: number = 1): Promise<ResponseBody | undefined> => {
   try {
-    const res = await axios.withApiKey.get("/movie/top_rated?language=en-US&page=1");
+    const res = await axios.withApiKey.get(`/movie/popular?language=en-US&page=${page}`);
     return res.data;
   } catch (error) {
     isAxiosError(error) && console.log(error.response?.data.status_message);
   }
 };
 
-export default getTopRated;
+export default getPopular;
 export type { ResponseBody };

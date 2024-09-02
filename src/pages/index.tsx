@@ -6,7 +6,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import getMainMovie, { type ResponseBody as Movie } from "../api/main-movie.get";
 import getNowPlaying, { type ResponseBody as MovieList } from "../api/now-playing.get";
 import getUpcoming from "../api/upcoming.get";
-import getTopRated from "../api/top-rated.get";
+import getPopular from "../api/popular.get";
 
 export default function Index() {
   const tabs = [
@@ -19,8 +19,8 @@ export default function Index() {
       key: "upcoming",
     },
     {
-      title: "Top Rated",
-      key: "topRated",
+      title: "Popular",
+      key: "popular",
     },
   ];
   const [currentTab, setCurrentTab] = useState<string>("nowPlaying");
@@ -41,24 +41,26 @@ export default function Index() {
   const [movieList, setMovieList] = useState<MovieList>();
 
   const loadMovieList = useCallback(async () => {
-    console.log(currentTab);
     const movies =
       currentTab === "nowPlaying"
         ? await getNowPlaying()
         : currentTab === "upcoming"
           ? await getUpcoming()
-          : await getTopRated();
+          : await getPopular();
     setMovieList(movies);
   }, [currentTab]);
 
-  useEffect(() => {
-    const loadData = async () => {
-      const res = await getMainMovie();
-      setMainMovie(res);
+  const loadData = async () => {
+    const res = await getMainMovie();
+    setMainMovie(res);
+  };
 
-      loadMovieList();
-    };
+  useEffect(() => {
     loadData();
+  }, []);
+
+  useEffect(() => {
+    loadMovieList();
   }, [loadMovieList]);
 
   return (

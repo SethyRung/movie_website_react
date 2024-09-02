@@ -35,15 +35,15 @@ const MovieCard = ({
           <p className="text-grey-500">Language :</p>
           <p className="text-gray-400">{language}</p>
         </div>
-        <Link
+        {/* <Link
           to=""
-          className="w-full h-8 text-white rounded bg-primary-500 hover:bg-primary-600 transition-all flex items-center justify-center gap-2 text-xs tablet:text-base">
+          className="w-full h-8 text-white border border-primary-500 rounded bg-primary-500/15 hover:border-2 transition-all flex items-center justify-center gap-2 text-xs tablet:text-base">
           <Icon icon="mdi-ticket-confirmation" width="16" />
           Get Tickets
-        </Link>
+        </Link> */}
         <Link
           to={`/movie/${id}`}
-          className="w-full h-8 text-white border border-primary-500 rounded bg-primary-500/15 hover:border-2 transition-all flex items-center justify-center gap-2 text-xs tablet:text-base">
+          className="w-full h-8 text-white rounded bg-primary-500 hover:bg-primary-600 transition-all flex items-center justify-center gap-2 text-xs tablet:text-base">
           <Icon icon="mdi-eye" width="16" />
           View Details
         </Link>
